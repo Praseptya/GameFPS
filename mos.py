@@ -92,27 +92,40 @@ for i in range(6):
     moving_targets.append(moving_target)
 
 # 4. pistol
-pistol = Entity(parent=camera, model='cube', color=color.gray, origin_y=-0.5, scale=(0.5,0.5,2), position=(2,-1,2.5), collider='box')
+pistol = Entity(parent=camera, model='pistol.obj', scale=0.1, rotation=(90,30,50) ,position=(1, -0.5, 1.5), collider='box')
 
 # 5. player
 player = FirstPersonController(model='cube', y=0, origin_y=-.5)
 player.pistol = pistol
 
 # 6. interact peluru
+def shoot():
+    bullet = Entity(parent=pistol, model='cube', scale=0.3, color=color.black, collider='box')
+    bullet.world_parent = scene
+    bullet.position = player.pistol.world_position + player.pistol.forward * -2.3
+    bullet.look_at(bullet.position + camera.forward)
+    peluru.append(bullet)
+    pistol.blink(color.white)
+        
+# Interval untuk menembak secara terus menerus
+shoot_interval = 0.1
+shoot_timer = 0
+
 def input(key):
-    global peluru
-    if key == 'left mouse down' and player.pistol:
-        bullet = Entity(parent=pistol, model='cube', scale=.1, position=(0,0,1),  color=color.black, collider='box')
-        peluru.append(bullet)
-        pistol.blink(color.white)
-        bullet.world_parent = scene
+    if key == 'left mouse down':
+        shoot()
         
         
 
 # 7. Interact object (klo di hit ilang)
 def update():
-    if held_keys['escape']:
-        application.quit()
+    global shoot_timer
+
+    if held_keys['left mouse']:
+        shoot_timer -= time.dt
+        if shoot_timer <= 0:
+            shoot()
+            shoot_timer = shoot_interval
 
     for m in moving_targets:
         m.x += m.dx
@@ -123,10 +136,13 @@ def update():
             m.x = -9
             m.dx *= -1
 
+    if held_keys['escape']:
+        application.quit()
+   
     global peluru
     if len(peluru) > 0:
         for b in peluru:
-            b.position += b.forward * time.dt * 80
+            b.position += b.forward * time.dt * 500
             hit_info = b.intersects()
             if hit_info.hit:
                 if hit_info.entity in moving_targets:
