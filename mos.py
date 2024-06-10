@@ -66,14 +66,15 @@ for i in range(rows):
         
 ground = Entity(model='plane', scale=(100,1,100), color=color.white.tint(-.2), texture='white_cube', texture_scale=(100,100), collider='box')
 barrier = Entity(model='cube', scale=(20,2,0.5), color=color.orange, collider='box', x=0, z=2)
-dinding1 = Entity(model='cube', scale=(20,12,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=0, z=-2)
+atap = Entity(model='cube', scale=(24, 1, 24), color=color.white, texture='dinding texture.jpeg', collider='box', x=0, y=9, z=10)
+dinding1 = Entity(model='cube', scale=(20,17,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=0, z=-2)
 papan_tulis = Entity (model = 'cube', scale=(8,4,0.5), color = color.white, texture = '200w.gif', collider='mesh', x= 0,y= 3, z= 21)
 papan_tulis2 = Entity (model = 'cube', scale=(10,5,0.5), color = color.white, texture = 'sky.jpg', collider='mesh', x= 0,y= 3, z= -1.5)
 papan_tulis3 = Entity (model = 'cube', scale=(6,3,0.5), color = color.white, texture = 'sky.jpg', collider='mesh', x= 9.7,y= 3, z= 12, rotation_y=90)
 papan_tulis4 = Entity (model = 'cube', scale=(6,3,0.5), color = color.white, texture = 'sky.jpg', collider='mesh', x= 9.7,y= 3, z= 5, rotation_y=90)
-dinding2 = Entity(model='cube', scale=(20,12,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=0, z=22)
-dinding3 = Entity(model='cube', scale=(24,12,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=-10, z=10, rotation_y=90)
-dinding4 = Entity(model='cube', scale=(24,12,1), color=color.white,texture = 'dinding texture.jpeg', collider='box', x=10, z=10, rotation_y=90)
+dinding2 = Entity(model='cube', scale=(20,17,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=0, z=22)
+dinding3 = Entity(model='cube', scale=(24,17,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=-10, z=10, rotation_y=90)
+dinding4 = Entity(model='cube', scale=(24,17,1), color=color.white,texture = 'dinding texture.jpeg', collider='box', x=10, z=10, rotation_y=90)
 
 # 2. entitas
 peluru = []
