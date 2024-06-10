@@ -76,18 +76,22 @@ dinding2 = Entity(model='cube', scale=(20,17,1), color=color.white, texture = 'd
 dinding3 = Entity(model='cube', scale=(24,17,1), color=color.white, texture = 'dinding texture.jpeg',collider='box', x=-10, z=10, rotation_y=90)
 dinding4 = Entity(model='cube', scale=(24,17,1), color=color.white,texture = 'dinding texture.jpeg', collider='box', x=10, z=10, rotation_y=90)
 
+lamp_positions = [(-6, 8, 4), (6, 8, 4), (-6, 8, 15), (6, 8, 15)]
+for pos in lamp_positions:
+    lampu = Entity(model='cube', scale=(1, 0.1, 1), color=color.white, position=pos, collider='box')
+
 # 2. entitas
 peluru = []
 moving_targets = []
 
 # Load target textures
-target_textures = [load_texture('botol.jpg'), load_texture('sky.jpg'), load_texture('smoke.jpg')]
+target_textures = [load_texture('botol.jpg'), load_texture('drugs.jpg'), load_texture('smoke.jpg')]
 
 # 3. target placement
-for i in range(6):
+for i in range(7):
     x = random.randrange(-9, 9, 2)
     y = random.randrange(1, 6, 1)
-    z = random.randrange(3, 21, 2)
+    z = random.randrange(5, 21, 2)
     texture = random.choice(target_textures)
     moving_target = Entity(model='cube', color=color.white, texture=texture, scale=(1,1,0.1), dx=0.05, position=(x,y,z), collider='box')
     moving_targets.append(moving_target)
