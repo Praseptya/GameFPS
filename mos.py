@@ -45,7 +45,7 @@ class Object2_5D(Entity):
             text=message,
             origin=(0, 0),
             position=(0, 0.3),
-            color=color.yellow
+            color=color.red
         )
         self.current_text.fade_out(duration=3)
         
@@ -56,7 +56,7 @@ object_2_5d = Object2_5D()
 class Object2_5D(Entity):
     def __init__(self, **kwargs):
         super().__init__()
-        self.front = Entity(parent=self, model='quad', texture='char1.png', scale=(3, 3), double_sided=True)
+        self.front = Entity(parent=self, model='quad', texture='orang.png', scale=(3.5, 3.5), double_sided=True)
         self.position = (-5, 1.5, 19)
         self.message_index = 0
         self.current_text = None 
@@ -90,15 +90,33 @@ class Object2_5D(Entity):
             text=message,
             origin=(0, 0),
             position=(0, 0.3),
-            color=color.yellow
+            color=color.red
         )
         self.current_text.fade_out(duration=3)
         
         self.message_index = (self.message_index + 1) % len(messages)
 
-
+background_sound = Audio('background_sound.mp3', autoplay=True, loop=True)
 
 object_2_5d = Object2_5D()
+
+
+class Billboard(Entity):
+    def __init__(self, texture, position, scale=(1, 1), **kwargs):
+        super().__init__()
+        self.front = Entity(parent=self, model='quad', texture=texture, scale=scale, double_sided=True)
+        self.position = position
+        
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def update(self):
+        direction = camera.world_position - self.world_position
+        angle = atan2(direction.x, direction.z)
+        self.rotation_y = degrees(angle)
+
+cctv1 = Billboard(texture='cctv.png', position=(8, 7.9, 20), name='cctv1')
+
 # 1. field
 
 # Menambahkan banyak kursi dalam baris dan kolom
@@ -115,12 +133,12 @@ barrier = Entity(model='cube', scale=(20,2,0.5), color=color.orange, collider='b
 atap = Entity(model='cube', scale=(24, 1, 24), color=color.white, texture='dinding texture.jpeg', collider='box', x=0, y=9, z=10)
 dinding1 = Entity(model='cube', scale=(20,17,1), color=color.white, texture='dinding texture.jpeg',collider='box', x=0, z=-2)
 papan_tulis = Entity(model='cube', scale=(8,4,0.5), color=color.white, texture='360_F_219800840_8JfVeADJGyoPx1FWm8x43HYHjiQCy94w.jpg', collider='mesh', x=0, y=3, z=21)
-ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=0, y=6, z=21)
-ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=9.5,  y=5, z=12, rotation_y=90)
-ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=9.5, y=5, z=5, rotation_y=90)
+ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=0, y=7, z=21)
+ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=9.5,  y=7, z=12, rotation_y=90)
+ac = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='ac.png', collider='mesh', x=9.5, y=7, z=5, rotation_y=90)
 vents = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='vents.jpg', collider='mesh', x=-9.5,  y=5, z=12, rotation_y=90)
 vents = Entity(model='cube', scale=(4,1,0.1), color=color.white, texture='vents.jpg', collider='mesh', x=-9.5, y=5, z=5, rotation_y=90)
-pintu = Entity(model='cube', scale=(7,9,0.1), color=color.white, texture='pintu.png', collider='mesh', x=-9.5, y=1, z=19, rotation_y=90)
+pintu = Entity(model='cube', scale=(6,6,0), color=color.white, texture='pintu.png', collider='mesh', x=-9.5, y=2, z=19, rotation_y=90)
 papan_tulis2 = Entity(model='cube', scale=(7,4,0.5), color=color.white, texture='sky.jpg', collider='mesh', x=0, y=3, z=-1.5)
 papan_tulis3 = Entity(model='cube', scale=(6,3,0.5), color=color.white, texture='sky.jpg', collider='mesh', x=9.7, y=3, z=12, rotation_y=90)
 papan_tulis4 = Entity(model='cube', scale=(6,3,0.5), color=color.white, texture='sky.jpg', collider='mesh', x=9.7, y=3, z=5, rotation_y=90)
@@ -150,7 +168,7 @@ for i in range(7):
 
 # 4. pistol
 pistol = Entity(parent=camera, model='pistol.obj', scale=0.1, rotation=(90,30,50) ,position=(1, -0.5, 1.5), collider='box')
-
+shoot_sound = Audio('shoot_sound.mp3', autoplay=False)
 # 5. player
 player = FirstPersonController(model='cube', y=0, origin_y=-.5)
 player.pistol = pistol
@@ -162,7 +180,8 @@ def shoot():
     bullet.position = player.pistol.world_position + player.pistol.forward * -2.3
     bullet.look_at(bullet.position + camera.forward)
     peluru.append(bullet)
-    pistol.blink(color.white)
+    pistol.blink(color.gray)
+    shoot_sound.play()
         
 # Interval untuk menembak secara terus menerus
 shoot_interval = 0.1
@@ -206,7 +225,7 @@ def update():
                     destroy(b)
                     peluru.remove(b)
                     if len(moving_targets) == 0:
-                        message = Text(text='YOU WON', scale=2, origin=(0,0), background=True, color=color.blue)
+                        message = Text(text='SELAMAT ANDA TELAH CUM LAUDE!', scale=2, origin=(0,0), background=True, color=color.blue)
                         if held_keys['escape']:
                             application.quit()
 
